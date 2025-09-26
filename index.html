@@ -146,6 +146,27 @@
     .community-list a:hover {
       color: #ffae42;
     }
+
+    /* 중앙 세션 */
+    .middle-box {
+      background-color: #242424;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      padding: 20px;
+      margin-top: 30px;
+      flex: 1;
+      text-align: center;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .middle-box span {
+      position: relative;
+      top: -5px; /* 글씨를 조금 위로 */
+      font-size: 16px;
+      color: #ddd;
+    }
   </style>
 </head>
 <body>
@@ -190,6 +211,11 @@
         <li><a href="#">커뮤니티 D</a></li>
         <li><a href="#">커뮤니티 E</a></li>
       </ul>
+    </div>
+
+    <!-- 중앙 세션 -->
+    <div class="middle-box">
+      <span>중앙 세션 (추가 버튼 영역)</span>
     </div>
 
     <!-- 오른쪽 F~J -->
@@ -250,5 +276,3 @@
 
 </body>
 </html>
-
-
