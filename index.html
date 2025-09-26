@@ -12,22 +12,22 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #1c1c1c; /* 어두운 회색 배경 */
+      background-color: #1c1c1c;
       color: #fff;
     }
 
     /* 헤더 */
     header {
-      background-color: #003d80; /* 더 진한 파란색 (남색 느낌) */
+      background-color: #003d80;
       color: white;
-      padding: 10px 25px;
+      padding: 11px 25px; /* 기존 10px -> 11px (110% 확대) */
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     header .logo {
-      font-size: 18px;
+      font-size: 19.8px;
       font-weight: bold;
     }
 
@@ -36,22 +36,22 @@
       text-decoration: none;
       margin-left: 15px;
       font-weight: bold;
-      font-size: 14px;
+      font-size: 15.4px;
       transition: color 0.3s;
     }
 
     header .auth-buttons a:hover {
-      color: #ffcc00; /* hover 시 포인트 */
+      color: #ffcc00;
     }
 
     /* 공지 텍스트 박스 */
     .notice-box {
-      width: 70%; /* 슬라이드와 동일한 폭 */
+      width: 70%;
       margin: 15px auto 0 auto;
       text-align: left;
-      font-size: 18px;
+      font-size: 19.8px;
       font-weight: bold;
-      color: #ffae42; /* 연한 주황색 */
+      color: #ffae42;
     }
 
     /* 슬라이더 */
@@ -59,7 +59,7 @@
       position: relative;
       width: 70%;
       margin: 10px auto;
-      height: 250px;
+      height: 275px; /* 기존 250px -> 275px (110% 확대) */
       overflow: hidden;
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.5);
@@ -78,7 +78,6 @@
       object-fit: cover;
     }
 
-    /* 슬라이드 네비게이션 (점) */
     .dots {
       text-align: center;
       margin-top: 10px;
@@ -98,17 +97,38 @@
       background-color: #003d80;
     }
 
-    /* 커뮤니티 목록 */
+    /* 커뮤니티 섹션 */
     .community-section {
       width: 70%;
       margin: 40px auto;
       display: flex;
       justify-content: space-between;
+      gap: 20px;
+    }
+
+    .community-box {
+      background-color: #242424;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      width: auto;
+      max-width: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .community-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #ffae42;
     }
 
     .community-list {
       list-style: none;
       padding: 0;
+      margin: 0;
     }
 
     .community-list li {
@@ -118,12 +138,13 @@
     .community-list a {
       color: #ddd;
       text-decoration: none;
-      font-size: 15px;
+      font-size: 16px;
+      font-weight: normal;
       transition: color 0.3s;
     }
 
     .community-list a:hover {
-      color: #ffae42; /* hover 시 강조 */
+      color: #ffae42;
     }
   </style>
 </head>
@@ -131,7 +152,6 @@
 
   <!-- 헤더 -->
   <header>
-    
     <div class="logo">BANBLE LEON</div>
     <div class="auth-buttons">
       <a href="#">로그인</a>
@@ -140,11 +160,10 @@
   </header>
 
   <!-- 공지 텍스트 박스 -->
-  <div class="notice-box" style="font-size:14px;">
+  <div class="notice-box" style="font-size:15.4px;">
     오늘의 공지: 새로운 이벤트가 시작되었습니다!
   </div>
 
-  
   <!-- 슬라이더 -->
   <div class="slider">
     <div class="slides">
@@ -159,22 +178,31 @@
     <span class="dot"></span>
   </div>
 
-  <!-- 커뮤니티 목록 -->
+  <!-- 커뮤니티 섹션 -->
   <div class="community-section">
-    <ul class="community-list">
-      <li><a href="#">커뮤니티 A</a></li>
-      <li><a href="#">커뮤니티 B</a></li>
-      <li><a href="#">커뮤니티 C</a></li>
-      <li><a href="#">커뮤니티 D</a></li>
-      <li><a href="#">커뮤니티 E</a></li>
-    </ul>
-    <ul class="community-list">
-      <li><a href="#">커뮤니티 F</a></li>
-      <li><a href="#">커뮤니티 G</a></li>
-      <li><a href="#">커뮤니티 H</a></li>
-      <li><a href="#">커뮤니티 I</a></li>
-      <li><a href="#">커뮤니티 J</a></li>
-    </ul>
+    <!-- 왼쪽 A~E -->
+    <div class="community-box">
+      <div class="community-title">왼쪽 커뮤니티</div>
+      <ul class="community-list">
+        <li><a href="#">커뮤니티 A</a></li>
+        <li><a href="#">커뮤니티 B</a></li>
+        <li><a href="#">커뮤니티 C</a></li>
+        <li><a href="#">커뮤니티 D</a></li>
+        <li><a href="#">커뮤니티 E</a></li>
+      </ul>
+    </div>
+
+    <!-- 오른쪽 F~J -->
+    <div class="community-box">
+      <div class="community-title">오른쪽 커뮤니티</div>
+      <ul class="community-list">
+        <li><a href="#">커뮤니티 F</a></li>
+        <li><a href="#">커뮤니티 G</a></li>
+        <li><a href="#">커뮤니티 H</a></li>
+        <li><a href="#">커뮤니티 I</a></li>
+        <li><a href="#">커뮤니티 J</a></li>
+      </ul>
+    </div>
   </div>
 
   <script>
@@ -198,47 +226,27 @@
       dot.addEventListener("click", () => showSlide(i));
     });
 
-    setInterval(autoSlide, 4000); // 4초마다 자동 슬라이드
+    setInterval(autoSlide, 4000);
   </script>
 
+  <!-- 사이트 푸터 -->
+  <footer style="background:#111; color:#ccc; font-size:12px; padding:20px; text-align:center; line-height:1.5;">
+    <div>
+      <a href="#" style="color:#ccc; text-decoration:none; margin:0 4.5px;">이용약관</a> |
+      <a href="#" style="color:#ccc; text-decoration:none; margin:0 4.5px;">개인정보 처리방침</a> |
+      <a href="#" style="color:#ccc; text-decoration:none; margin:0 4.5px;">유피드 자산 데이터 서버 지침</a> |
+      <a href="#" style="color:#ccc; text-decoration:none; margin:0 4.5px;">밴블리온 운영부 고지 사항</a> |
+      <a href="#" style="color:#ccc; text-decoration:none; margin:0 4.5px;">커뮤니티 가이드라인</a> |
+    </div>
+    <div style="margin-top:9px;">
+      유피드는 밴블리온 사 프로그램 개발 부서 "에너자이저"의 공식 인트라넷 플랫폼으로, 모든 사이트 내 정보는 사이트 자산사의 목적에 한해 제한되고 관리될 수 있습니다.
+    </div>
+    <div style="margin-top:9px;">
+      경기도 수원시 밴블리온 수원 지부 미공개 위치<br>
+      help@upid.org | 오픈 소스 라이선스<br>
+      ©UPID Foundation.
+    </div>
+  </footer>
 
-<!-- 사이트 푸터 -->
-<footer style="background:#111; color:#ccc; font-size:12px; padding:20px; text-align:center; line-height:1.5;">
-  <div>
-    <a href="#" style="color:#ccc; text-decoration:none; margin:0 4.5px;">이용약관</a> |
-    <a href="#" style="color:#ccc; text-decoration:none; margin:0 4.5px;">개인정보 처리방침</a> |
-    <a href="#" style="color:#ccc; text-decoration:none; margin:0 4.5px;">유피드 자산 데이터 서버 지침</a> |
-    <a href="#" style="color:#ccc; text-decoration:none; margin:0 4.5px;">밴블리온 운영부 고지 사항</a> |
-    <a href="#" style="color:#ccc; text-decoration:none; margin:0 4.5px;">커뮤니티 가이드라인</a> |
-  </div>
-  <div style="margin-top:9px;">
-    유피드는 밴블리온 사 프로그램 개발 부서 "에너자이저"의 공식 인트라넷 플랫폼으로, 모든 사이트 내 정보는 사이트 자산사의 목적에 한해 제한되고 관리될 수 있습니다.
-  </div>
-  <div style="margin-top:9px;">
-    경기도 수원시 밴블리온 수원 지부 미공개 위치<br>
-    help@upid.org | 오픈 소스 라이선스<br>
-    ©UPID Foundation.
-  </div>
-</footer>
-
-  
-  
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
