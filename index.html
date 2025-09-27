@@ -108,13 +108,14 @@
       gap: 20px;
     }
 
-    /* 왼쪽 / 오른쪽 커뮤니티 박스 너비 고정 (사진과 비슷한 레이아웃을 위해 고정 폭) */
+    /* 왼쪽 / 오른쪽 커뮤니티 박스 너비 고정 (사진과 비슷한 레이아웃을 위해 고정 폭)
+       -> 변경: 가로 길이(너비)를 조금 줄여 미관 개선 (너무 뚱뚱하지 않게) */
     .community-box {
       background-color: #242424;
       padding: 15px;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-      width: 200px; /* 고정 너비: 좌우가 좁고 중앙이 넓게 보이도록 설정 */
+      width: 180px; /* <-- 조정: 기존 200px에서 180px로 소폭 축소 */
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -159,13 +160,13 @@
     }
 
     /* 버튼 UI: 중앙 컬럼 상단에 배치, 버튼들 사이를 균등 분배
-       -> 변경 포인트: 좌우 패딩을 늘려 양끝 버튼과 커뮤니티 박스 사이 간격 확보 */
+       -> 변경 포인트: 좌우 패딩을 늘려 양끝 버튼과 사이드 박스 거리 확보 */
     .icon-buttons {
       width: 100%;
       display: flex;
       justify-content: space-between; /* 버튼들을 컬럼 너비에 따라 균등 분배 (사진처럼 1/4 간격) */
       align-items: flex-start; /* 버튼의 top y 좌표를 커뮤니티 박스 상단과 같게 유지 */
-      padding: 0 48px; /* <-- 여기서 좌우 여백을 늘려 양끝 버튼과 사이드 박스 거리 확보 */
+      padding: 0 48px; /* <-- 좌우 여백으로 양끝 버튼과 커뮤니티 박스 사이 거리 확보 */
       box-sizing: border-box;
       margin: 0; /* 슬라이더 아래 바로 정렬되도록 여백 제거 */
       gap: 24px; /* 버튼 사이 간격 여유 */
@@ -277,7 +278,7 @@
         width: 92%;
       }
       .community-box {
-        width: 160px;
+        width: 140px; /* <-- 모바일 쪽도 소폭 축소 (이전 160px에서 140px) */
       }
       .icon-buttons {
         padding: 0 16px; /* 모바일에서는 패딩 줄임 */
