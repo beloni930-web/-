@@ -98,22 +98,23 @@
       background-color: #003d80;
     }
 
-    /* 커뮤니티 섹션 */
+    /* 커뮤니티 섹션: 좌 - 중앙 - 우 가로 정렬 (버튼이 중앙 컬럼 상단에 위치) */
     .community-section {
       width: 70%;
-      margin: 40px auto;
+      margin: 25px auto 0 auto;
       display: flex;
       justify-content: space-between;
+      align-items: flex-start; /* 상단 기준 정렬해서 버튼과 커뮤니티 박스의 Y 좌표를 맞춤 */
       gap: 20px;
     }
 
+    /* 왼쪽 / 오른쪽 커뮤니티 박스 너비 고정 (사진과 비슷한 레이아웃을 위해 고정 폭) */
     .community-box {
       background-color: #242424;
       padding: 15px;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-      width: auto;
-      max-width: 50%;
+      width: 200px; /* 고정 너비: 좌우가 좁고 중앙이 넓게 보이도록 설정 */
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -148,28 +149,81 @@
       color: #ffae42;
     }
 
-    /* 중앙 세션 */
+    /* 중앙 컬럼: 버튼 행 + 중앙 세션(중앙 박스) 포함 */
+    .middle-column {
+      flex: 1; /* 좌우 고정 폭을 제외한 나머지를 차지 */
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+    }
+
+    /* 버튼 UI: 중앙 컬럼 상단에 배치, 버튼들 사이를 균등 분배
+       -> 변경 포인트: 좌우 패딩을 늘려 양끝 버튼과 커뮤니티 박스 사이 간격 확보 */
+    .icon-buttons {
+      width: 100%;
+      display: flex;
+      justify-content: space-between; /* 버튼들을 컬럼 너비에 따라 균등 분배 (사진처럼 1/4 간격) */
+      align-items: flex-start; /* 버튼의 top y 좌표를 커뮤니티 박스 상단과 같게 유지 */
+      padding: 0 48px; /* <-- 여기서 좌우 여백을 늘려 양끝 버튼과 사이드 박스 거리 확보 */
+      box-sizing: border-box;
+      margin: 0; /* 슬라이더 아래 바로 정렬되도록 여백 제거 */
+      gap: 24px; /* 버튼 사이 간격 여유 */
+    }
+
+    .icon-button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      flex: 1 1 0; /* 가변 너비로 균등 분배되도록 함 */
+      max-width: 120px;
+      min-width: 80px; /* 너무 좁아지지 않도록 최소 너비 설정 */
+    }
+
+    .icon-button img {
+      width: 72px;  /* 사진과 비슷한 크기감으로 조정 */
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 8px;
+      border: 2px solid #fff;
+      transition: transform 0.2s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+      background: #222;
+    }
+
+    .icon-button img:hover {
+      transform: scale(1.06);
+    }
+
+    .icon-button span {
+      font-size: 14px;
+      color: #ddd;
+    }
+
+    /* 중앙 세션 박스 (버튼의 바로 아래에 위치) */
     .middle-box {
       background-color: #242424;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.4);
       padding: 20px;
-      margin-top: 30px;
-      flex: 1;
+      /* margin-top을 제거하거나 작게 유지해서 버튼과의 간격을 사진과 유사하게 조정 */
+      margin: 0 0 0 0;
+      min-height: 110px; /* 사진의 중앙 박스 높이 느낌을 반영 */
       text-align: center;
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: center;
     }
 
     .middle-box span {
-      position: relative;
-      top: -5px;
       font-size: 16px;
       color: #ddd;
     }
 
-    /* 모달 공통 */
+    /* 모달 공통 (변경 없음) */
     .modal {
       display: none;
       position: fixed;
@@ -216,6 +270,25 @@
       font-size: 18px;
       margin-top: -5px;
     }
+
+    /* 반응형 보조 (너무 크게 깨지지 않도록 최소 너비 조정) */
+    @media (max-width: 900px) {
+      .community-section, .slider {
+        width: 92%;
+      }
+      .community-box {
+        width: 160px;
+      }
+      .icon-buttons {
+        padding: 0 16px; /* 모바일에서는 패딩 줄임 */
+        gap: 12px;
+      }
+      .icon-button img {
+        width: 56px;
+        height: 56px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -227,7 +300,6 @@
       <a onclick="openModal('loginModal')">로그인</a>
       <a onclick="openModal('signupModal')">회원가입</a>
       <a id="logoutBtn" style="display:none;cursor:pointer;">로그아웃</a>
-      <!-- ✅ 로그인 후 사용자 이름 표시 영역 -->
       <span id="userName" style="margin-left:15px; font-weight:bold; color:#ffcc00; display:none;"></span>
     </div>
   </header>
@@ -251,7 +323,7 @@
     <span class="dot"></span>
   </div>
 
-  <!-- 커뮤니티 섹션 -->
+  <!-- 커뮤니티 섹션: 좌 - 중앙(버튼+중앙박스) - 우 -->
   <div class="community-section">
     <!-- 왼쪽 A~E -->
     <div class="community-box">
@@ -265,9 +337,32 @@
       </ul>
     </div>
 
-    <!-- 중앙 세션 -->
-    <div class="middle-box">
-      <span>중앙 세션 (추가 버튼 영역)</span>
+    <!-- 중앙 컬럼: 버튼 행이 상단에 오도록 배치 -->
+    <div class="middle-column">
+      <!-- 아이콘 버튼들은 이제 중앙 컬럼의 상단에 위치하여, 커뮤니티 박스 상단과 Y 좌표가 맞음 -->
+      <div class="icon-buttons">
+        <div class="icon-button">
+          <img src="img1.png" alt="버튼1">
+          <span>버튼1</span>
+        </div>
+        <div class="icon-button">
+          <img src="img2.png" alt="버튼2">
+          <span>버튼2</span>
+        </div>
+        <div class="icon-button">
+          <img src="img3.png" alt="버튼3">
+          <span>버튼3</span>
+        </div>
+        <div class="icon-button">
+          <img src="img4.png" alt="버튼4">
+          <span>버튼4</span>
+        </div>
+      </div>
+
+      <!-- 중앙 세션 (버튼 아래) -->
+      <div class="middle-box">
+        <span>중앙 세션</span>
+      </div>
     </div>
 
     <!-- 오른쪽 F~J -->
@@ -307,7 +402,6 @@
   </div>
 
   <script type="module">
-    // Firebase SDK import
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } 
       from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -325,7 +419,6 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // 모달 열고 닫기
     window.openModal = function(id) {
       document.getElementById(id).style.display = "flex";
     }
@@ -333,9 +426,6 @@
       document.getElementById(id).style.display = "none";
     }
 
-    // --------------------------
-    // ✅ 헤더 UI 업데이트 헬퍼 (수정된/추가된 핵심 부분)
-    // --------------------------
     function updateHeader(user) {
       const userNameEl = document.getElementById("userName");
       const loginBtn = document.querySelector(".auth-buttons a[onclick*='loginModal']");
@@ -348,7 +438,6 @@
         if (logoutBtn) logoutBtn.style.display = "inline-block";
 
         if (userNameEl) {
-          // displayName 우선, 없으면 이메일, 그래도 없으면 기본 텍스트
           const name = user.displayName || user.email || "사용자";
           userNameEl.textContent = name;
           userNameEl.style.display = "inline-block";
@@ -364,11 +453,7 @@
         }
       }
     }
-    // --------------------------
-    // (끝) 헤더 업데이트 헬퍼
-    // --------------------------
 
-    // 회원가입
     document.getElementById("signupSubmit").addEventListener("click", async () => {
       const nickname = document.getElementById("signupNickname").value;
       const email = document.getElementById("signupEmail").value;
@@ -376,7 +461,6 @@
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
         await updateProfile(userCredential.user, { displayName: nickname });
-        // 즉시 헤더에 반영되도록 업데이트 호출
         updateHeader(userCredential.user);
         alert("회원가입 완료!");
         closeModal("signupModal");
@@ -385,12 +469,10 @@
       }
     });
 
-    // 로그인
     document.getElementById("loginSubmit").addEventListener("click", async () => {
       const email = document.getElementById("loginEmail").value;
       const pass = document.getElementById("loginPass").value;
       try {
-        // 반환값을 받아 즉시 UI 업데이트
         const userCredential = await signInWithEmailAndPassword(auth, email, pass);
         updateHeader(userCredential.user);
         alert("로그인 성공!");
@@ -400,22 +482,17 @@
       }
     });
 
-    // 로그아웃
     document.getElementById("logoutBtn").addEventListener("click", async () => {
       await signOut(auth);
-      // onAuthStateChanged로도 처리되지만 안전하게 한 번 더
       updateHeader(null);
     });
 
-    // 로그인 상태 유지 (다른 HTML에서도 공유됨)
     onAuthStateChanged(auth, (user) => {
-      // onAuthStateChanged에서 헤더 업데이트는 updateHeader로 위임
       updateHeader(user);
     });
   </script>
 
   <script>
-    // 슬라이더
     let index = 0;
     const slides = document.querySelector(".slides");
     const dots = document.querySelectorAll(".dot");
