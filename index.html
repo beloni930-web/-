@@ -1,5 +1,3 @@
-<!-- 전체 파일: 원본 코드(변경 없음) + 로그인/회원가입 기능 추가 -->
-<!-- 사용자 원본 시작 -->
 <!--
 경고: 귀하가 무단 수집하려는 사이트의 핵심 데이터는 본 오픈소스에 포함되지 않습니다. 본 사이트의 무단 소스 코드 데이터 수집(크롤링, 스크래핑 등)행위는 서버 접근 로그에 기기의 IP와 함께 기록됩니다.
 허용된 관리자 인터페이스를 제외한 IP가 데이터를 수집하는 행위는 적발 즉시 밴블리온 운영 정책에 따른 IP 유포와 유저 정보 공개 등 상응한 제재가 이루어질 수 있습니다.
@@ -11,7 +9,6 @@
   <meta charset="UTF-8">
   <title>유피드 밴블리온</title>
   <style>
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -23,7 +20,7 @@
     header {
       background-color: #003d80;
       color: white;
-      padding: 11px 25px; /* 기존 10px -> 11px (110% 확대) */
+      padding: 11px 25px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -41,6 +38,7 @@
       font-weight: bold;
       font-size: 15.4px;
       transition: color 0.3s;
+      cursor: pointer;
     }
 
     header .auth-buttons a:hover {
@@ -62,7 +60,7 @@
       position: relative;
       width: 70%;
       margin: 10px auto;
-      height: 275px; /* 기존 250px -> 275px (110% 확대) */
+      height: 275px;
       overflow: hidden;
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.5);
@@ -166,9 +164,57 @@
 
     .middle-box span {
       position: relative;
-      top: -5px; /* 글씨를 조금 위로 */
+      top: -5px;
       font-size: 16px;
       color: #ddd;
+    }
+
+    /* 모달 공통 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #1c1c1c;
+      padding: 20px;
+      border-radius: 10px;
+      color: white;
+      width: 300px;
+    }
+
+    .modal-content h2 {
+      margin-top: 0;
+    }
+
+    .modal-content input {
+      width: 100%;
+      margin: 5px 0;
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .modal-content button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .modal-close {
+      float: right;
+      cursor: pointer;
+      font-size: 18px;
+      margin-top: -5px;
     }
   </style>
 </head>
@@ -178,8 +224,11 @@
   <header>
     <div class="logo">BANBLE LEON</div>
     <div class="auth-buttons">
-      <a href="#" id="loginLink">로그인</a>
-      <a href="#" id="signupLink">회원가입</a>
+      <a onclick="openModal('loginModal')">로그인</a>
+      <a onclick="openModal('signupModal')">회원가입</a>
+      <a id="logoutBtn" style="display:none;cursor:pointer;">로그아웃</a>
+      <!-- ✅ 로그인 후 사용자 이름 표시 영역 -->
+      <span id="userName" style="margin-left:15px; font-weight:bold; color:#ffcc00; display:none;"></span>
     </div>
   </header>
 
@@ -234,7 +283,139 @@
     </div>
   </div>
 
+  <!-- 로그인 모달 -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('loginModal')">&times;</span>
+      <h2>로그인</h2>
+      <input type="email" id="loginEmail" placeholder="이메일">
+      <input type="password" id="loginPass" placeholder="비밀번호">
+      <button id="loginSubmit">로그인</button>
+    </div>
+  </div>
+
+  <!-- 회원가입 모달 -->
+  <div id="signupModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('signupModal')">&times;</span>
+      <h2>회원가입</h2>
+      <input type="text" id="signupNickname" placeholder="닉네임">
+      <input type="email" id="signupEmail" placeholder="이메일">
+      <input type="password" id="signupPass" placeholder="비밀번호">
+      <button id="signupSubmit">회원가입</button>
+    </div>
+  </div>
+
+  <script type="module">
+    // Firebase SDK import
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } 
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBJZle3txhhthWgaIWTTHzrLl4bkJqQye4",
+      authDomain: "fast-gateway-290809.firebaseapp.com",
+      projectId: "fast-gateway-290809",
+      storageBucket: "fast-gateway-290809.firebasestorage.app",
+      messagingSenderId: "640433110514",
+      appId: "1:640433110514:web:8fe4fafc9a987b6a4b3f6b",
+      measurementId: "G-2V57XWX7CW"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // 모달 열고 닫기
+    window.openModal = function(id) {
+      document.getElementById(id).style.display = "flex";
+    }
+    window.closeModal = function(id) {
+      document.getElementById(id).style.display = "none";
+    }
+
+    // --------------------------
+    // ✅ 헤더 UI 업데이트 헬퍼 (수정된/추가된 핵심 부분)
+    // --------------------------
+    function updateHeader(user) {
+      const userNameEl = document.getElementById("userName");
+      const loginBtn = document.querySelector(".auth-buttons a[onclick*='loginModal']");
+      const signupBtn = document.querySelector(".auth-buttons a[onclick*='signupModal']");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      if (user) {
+        if (loginBtn) loginBtn.style.display = "none";
+        if (signupBtn) signupBtn.style.display = "none";
+        if (logoutBtn) logoutBtn.style.display = "inline-block";
+
+        if (userNameEl) {
+          // displayName 우선, 없으면 이메일, 그래도 없으면 기본 텍스트
+          const name = user.displayName || user.email || "사용자";
+          userNameEl.textContent = name;
+          userNameEl.style.display = "inline-block";
+        }
+      } else {
+        if (loginBtn) loginBtn.style.display = "inline-block";
+        if (signupBtn) signupBtn.style.display = "inline-block";
+        if (logoutBtn) logoutBtn.style.display = "none";
+
+        if (userNameEl) {
+          userNameEl.textContent = "";
+          userNameEl.style.display = "none";
+        }
+      }
+    }
+    // --------------------------
+    // (끝) 헤더 업데이트 헬퍼
+    // --------------------------
+
+    // 회원가입
+    document.getElementById("signupSubmit").addEventListener("click", async () => {
+      const nickname = document.getElementById("signupNickname").value;
+      const email = document.getElementById("signupEmail").value;
+      const pass = document.getElementById("signupPass").value;
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+        await updateProfile(userCredential.user, { displayName: nickname });
+        // 즉시 헤더에 반영되도록 업데이트 호출
+        updateHeader(userCredential.user);
+        alert("회원가입 완료!");
+        closeModal("signupModal");
+      } catch (error) {
+        alert("회원가입 실패: " + error.message);
+      }
+    });
+
+    // 로그인
+    document.getElementById("loginSubmit").addEventListener("click", async () => {
+      const email = document.getElementById("loginEmail").value;
+      const pass = document.getElementById("loginPass").value;
+      try {
+        // 반환값을 받아 즉시 UI 업데이트
+        const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+        updateHeader(userCredential.user);
+        alert("로그인 성공!");
+        closeModal("loginModal");
+      } catch (error) {
+        alert("로그인 실패: " + error.message);
+      }
+    });
+
+    // 로그아웃
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await signOut(auth);
+      // onAuthStateChanged로도 처리되지만 안전하게 한 번 더
+      updateHeader(null);
+    });
+
+    // 로그인 상태 유지 (다른 HTML에서도 공유됨)
+    onAuthStateChanged(auth, (user) => {
+      // onAuthStateChanged에서 헤더 업데이트는 updateHeader로 위임
+      updateHeader(user);
+    });
+  </script>
+
   <script>
+    // 슬라이더
     let index = 0;
     const slides = document.querySelector(".slides");
     const dots = document.querySelectorAll(".dot");
@@ -278,367 +459,5 @@
   </footer>
 
   <link rel="icon" type="image/png" href="favicon.png">
-<!-- 사용자 원본 끝 -->
-
-<!-- 여기에부터 로그인/회원가입 관련 추가 코드 (원본 코드는 수정하지 않음) -->
-<!-- 모달 HTML (UI: 사용자가 제공한 모달 기반으로 추가) -->
-<!-- 로그인 모달 -->
-<div id="loginModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="loginTitle">
-  <div class="modal-content" role="document">
-    <span class="modal-close" onclick="closeModal('loginModal')">&times;</span>
-    <h2 id="loginTitle">로그인</h2>
-    <input type="email" id="loginEmail" placeholder="이메일" autocomplete="email">
-    <input type="password" id="loginPass" placeholder="비밀번호" autocomplete="current-password">
-    <div id="loginError" style="color:#ff6b6b; font-size:13px; min-height:18px; margin-top:6px;"></div>
-    <button id="loginSubmit">로그인</button>
-  </div>
-</div>
-
-<!-- 회원가입 모달 -->
-<div id="signupModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="signupTitle">
-  <div class="modal-content" role="document">
-    <span class="modal-close" onclick="closeModal('signupModal')">&times;</span>
-    <h2 id="signupTitle">회원가입</h2>
-    <input type="text" id="signupNickname" placeholder="닉네임" autocomplete="name">
-    <input type="email" id="signupEmail" placeholder="이메일" autocomplete="email">
-    <input type="password" id="signupPass" placeholder="비밀번호" autocomplete="new-password">
-    <div id="signupError" style="color:#ff6b6b; font-size:13px; min-height:18px; margin-top:6px;"></div>
-    <button id="signupSubmit">회원가입</button>
-  </div>
-</div>
-
-<!-- 추가 모달 스타일 (원본 스타일과 충돌 최소화) -->
-<style>
-  /* 모달 공통 (추가된 부분) */
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 10000;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6);
-    justify-content: center;
-    align-items: center;
-  }
-
-  .modal[aria-hidden="false"] {
-    display: flex;
-  }
-
-  .modal-content {
-    background-color: #1c1c1c;
-    padding: 20px;
-    border-radius: 10px;
-    color: white;
-    width: 320px;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.6);
-  }
-
-  .modal-content h2 {
-    margin-top: 0;
-  }
-
-  .modal-content input {
-    width: 100%;
-    margin: 6px 0;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #333;
-    background: #0f0f0f;
-    color: #fff;
-    box-sizing: border-box;
-  }
-
-  .modal-content button {
-    margin-top: 10px;
-    padding: 10px 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    background: #003d80;
-    color: #fff;
-    width: 100%;
-  }
-
-  .modal-close {
-    float: right;
-    cursor: pointer;
-    font-size: 18px;
-    margin-top: -5px;
-  }
-
-  /* 로그인 후 표시용 버튼 스타일 (헤더에 추가할 때 사용) */
-  .header-user {
-    color: white;
-    margin-left: 10px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .header-user button {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.18);
-    padding: 6px 8px;
-    border-radius: 6px;
-    color: #fff;
-    cursor: pointer;
-    font-weight: bold;
-  }
-</style>
-
-<!-- 로그인/회원가입 동작 스크립트 (Firebase 사용) -->
-<!-- 주의: 아래 firebaseConfig를 본인 프로젝트 설정으로 바꿔주세요. -->
-<script type="module">
-  // -----------------------
-  // Firebase v10+ modular import via CDN (ES module)
-  // Replace firebaseConfig with your project's config.
-  // Steps you must do in Firebase Console:
-  // 1) Authentication -> Sign-in method -> Enable Email/Password
-  // 2) Firestore -> create database (mode: 적절히 선택)
-  // 3) Add web app and copy firebaseConfig
-  // -----------------------
-
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-  import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged,
-    updateProfile
-  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-  import {
-    getFirestore,
-    doc,
-    setDoc,
-    getDoc,
-    serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-
-  // --------- REPLACE WITH YOUR FIREBASE CONFIG ----------
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "SENDER_ID",
-    appId: "APP_ID"
-  };
-  // -----------------------------------------------------
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  // Helper: DOM elements
-  const loginLink = document.getElementById('loginLink');
-  const signupLink = document.getElementById('signupLink');
-
-  const loginModal = document.getElementById('loginModal');
-  const signupModal = document.getElementById('signupModal');
-
-  const loginEmail = document.getElementById('loginEmail');
-  const loginPass = document.getElementById('loginPass');
-  const loginSubmit = document.getElementById('loginSubmit');
-  const loginError = document.getElementById('loginError');
-
-  const signupNickname = document.getElementById('signupNickname');
-  const signupEmail = document.getElementById('signupEmail');
-  const signupPass = document.getElementById('signupPass');
-  const signupSubmit = document.getElementById('signupSubmit');
-  const signupError = document.getElementById('signupError');
-
-  // Open modals
-  loginLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    openModal('loginModal');
-  });
-  signupLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    openModal('signupModal');
-  });
-
-  // Modal functions
-  window.openModal = function(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.setAttribute('aria-hidden', 'false');
-    // focus first input
-    const firstInput = el.querySelector('input');
-    if (firstInput) firstInput.focus();
-  }
-  window.closeModal = function(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.setAttribute('aria-hidden', 'true');
-    // clear error messages
-    if (id === 'loginModal') loginError.textContent = '';
-    if (id === 'signupModal') signupError.textContent = '';
-  }
-
-  // Click outside to close
-  document.addEventListener('click', (e) => {
-    ['loginModal','signupModal'].forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      if (el.getAttribute('aria-hidden') === 'false' && e.target === el) {
-        closeModal(id);
-      }
-    });
-  });
-
-  // Signup handler
-  signupSubmit.addEventListener('click', async () => {
-    signupError.textContent = '';
-    const nick = signupNickname.value.trim();
-    const email = signupEmail.value.trim();
-    const pass = signupPass.value;
-
-    if (!nick) { signupError.textContent = '닉네임을 입력해주세요.'; return; }
-    if (!validateEmail(email)) { signupError.textContent = '유효한 이메일을 입력해주세요.'; return; }
-    if (pass.length < 6) { signupError.textContent = '비밀번호는 최소 6자 이상이어야 합니다.'; return; }
-
-    signupSubmit.disabled = true;
-    signupSubmit.textContent = '가입중...';
-
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-      const user = userCredential.user;
-
-      // Update displayName in Auth profile (optional)
-      await updateProfile(user, { displayName: nick }).catch(()=>{ /* ignore */ });
-
-      // Save user profile to Firestore
-      const userRef = doc(db, 'users', user.uid);
-      await setDoc(userRef, {
-        nickname: nick,
-        email: email,
-        createdAt: serverTimestamp()
-      });
-
-      // close modal
-      closeModal('signupModal');
-    } catch (err) {
-      console.error(err);
-      signupError.textContent = firebaseErrorMessage(err);
-    } finally {
-      signupSubmit.disabled = false;
-      signupSubmit.textContent = '회원가입';
-    }
-  });
-
-  // Login handler
-  loginSubmit.addEventListener('click', async () => {
-    loginError.textContent = '';
-    const email = loginEmail.value.trim();
-    const pass = loginPass.value;
-
-    if (!validateEmail(email)) { loginError.textContent = '유효한 이메일을 입력해주세요.'; return; }
-    if (pass.length < 6) { loginError.textContent = '비밀번호는 최소 6자 이상이어야 합니다.'; return; }
-
-    loginSubmit.disabled = true;
-    loginSubmit.textContent = '로그인중...';
-
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, pass);
-      // 로그인 성공하면 Firebase가 상태를 유지합니다.
-      closeModal('loginModal');
-    } catch (err) {
-      console.error(err);
-      loginError.textContent = firebaseErrorMessage(err);
-    } finally {
-      loginSubmit.disabled = false;
-      loginSubmit.textContent = '로그인';
-    }
-  });
-
-  // Logout function (will be rendered in header by updateUIAfterAuth)
-  async function handleLogout() {
-    try {
-      await signOut(auth);
-    } catch (err) {
-      console.error('로그아웃 실패', err);
-      alert('로그아웃에 실패했습니다.');
-    }
-  }
-
-  // Observe auth state and update header accordingly
-  onAuthStateChanged(auth, async (user) => {
-    const authButtons = document.querySelector('.auth-buttons');
-    if (!authButtons) return;
-
-    // Clear current content but do not touch other header parts
-    // We'll replace only auth-buttons innerHTML (this is the only header part related to auth)
-    if (user) {
-      // Get nickname from profile or Firestore
-      let nickname = user.displayName || '';
-      if (!nickname) {
-        try {
-          const udoc = await getDoc(doc(db, 'users', user.uid));
-          if (udoc.exists()) {
-            const ud = udoc.data();
-            nickname = ud.nickname || nickname || user.email;
-          }
-        } catch (e) {
-          console.error('profile fetch failed', e);
-        }
-      }
-      // Replace auth-buttons content with user info + logout
-      authButtons.innerHTML = `
-        <span class="header-user" title="로그인 상태">
-          <strong style="color:#fff">${escapeHtml(nickname || (user.email || '사용자'))}</strong>
-          <button id="logoutBtn">로그아웃</button>
-        </span>
-      `;
-      const logoutBtn = document.getElementById('logoutBtn');
-      if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
-    } else {
-      // Not logged in — restore original login/signup links (note: original elements existed with IDs)
-      authButtons.innerHTML = `
-        <a href="#" id="loginLink">로그인</a>
-        <a href="#" id="signupLink">회원가입</a>
-      `;
-      // Reattach listeners for the re-created links
-      const newLogin = document.getElementById('loginLink');
-      const newSignup = document.getElementById('signupLink');
-      if (newLogin) newLogin.addEventListener('click', (e)=>{ e.preventDefault(); openModal('loginModal'); });
-      if (newSignup) newSignup.addEventListener('click', (e)=>{ e.preventDefault(); openModal('signupModal'); });
-    }
-  });
-
-  // Basic helpers
-  function validateEmail(email) {
-    // simple regex
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
-
-  function firebaseErrorMessage(err) {
-    if (!err || !err.code) return '알 수 없는 오류가 발생했습니다.';
-    switch (err.code) {
-      case 'auth/email-already-in-use': return '이미 사용 중인 이메일입니다.';
-      case 'auth/invalid-email': return '유효하지 않은 이메일입니다.';
-      case 'auth/weak-password': return '비밀번호가 너무 약합니다.';
-      case 'auth/wrong-password': return '비밀번호가 틀렸습니다.';
-      case 'auth/user-not-found': return '사용자를 찾을 수 없습니다.';
-      case 'auth/too-many-requests': return '요청이 너무 많습니다. 잠시 후 다시 시도하세요.';
-      default: return (err.message || '오류가 발생했습니다.');
-    }
-  }
-
-  // Simple HTML escape for display safety
-  function escapeHtml(unsafe) {
-    return String(unsafe)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-  // END of module
-</script>
-
-<!-- 끝: 로그인/회원가입 추가 코드 -->
 </body>
 </html>
