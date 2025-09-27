@@ -670,6 +670,133 @@
     </div>
   </div>
 
+  <!-- === 추가된 뉴스/이슈 섹션 (community-section 바로 아래, 독립된 레벨) === -->
+  <div style="width:70%; margin:20px auto 24px auto; box-sizing:border-box;">
+    <!-- 뉴스 카드 스트립 -->
+    <div id="extraNewsContainer" style="background:#242424; border-radius:10px; padding:12px; box-shadow:0 2px 10px rgba(0,0,0,0.45);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="font-size:16px; color:#ffae42; font-weight:bold;">뉴스 | 디시미디어 | 디시이슈</div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <button id="extraPrev" aria-label="이전" style="background:transparent; border:1px solid #3a3a3a; color:#ddd; padding:6px 8px; border-radius:6px; cursor:pointer;">◀</button>
+          <span id="extraPage" style="color:#bbb; font-size:13px;">1/1</span>
+          <button id="extraNext" aria-label="다음" style="background:transparent; border:1px solid #3a3a3a; color:#ddd; padding:6px 8px; border-radius:6px; cursor:pointer;">▶</button>
+        </div>
+      </div>
+
+      <div id="extraNewsWrapper" style="display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding-bottom:6px;">
+        <!-- 각 카드: 고정 폭으로 배치, 스크롤로 넘김 -->
+        <div class="extra-card" style="flex:0 0 220px; background:#1f1f1f; border-radius:8px; overflow:hidden; box-shadow:0 1px 6px rgba(0,0,0,0.5);">
+          <img src="https://via.placeholder.com/420x240?text=썸네일1" alt="thumb1" style="width:100%; height:120px; object-fit:cover; display:block;">
+          <div style="padding:10px; color:#ddd; font-size:14px; line-height:1.4;">
+            경기도, 'DMZ OPEN 국제음악제' 26일 고양서 개막
+          </div>
+        </div>
+
+        <div class="extra-card" style="flex:0 0 220px; background:#1f1f1f; border-radius:8px; overflow:hidden; box-shadow:0 1px 6px rgba(0,0,0,0.5);">
+          <img src="https://via.placeholder.com/420x240?text=썸네일2" alt="thumb2" style="width:100%; height:120px; object-fit:cover; display:block;">
+          <div style="padding:10px; color:#ddd; font-size:14px; line-height:1.4;">
+            최휘영 장관 "전통문화, K콘텐츠 성장동력으로"
+          </div>
+        </div>
+
+        <div class="extra-card" style="flex:0 0 220px; background:#1f1f1f; border-radius:8px; overflow:hidden; box-shadow:0 1px 6px rgba(0,0,0,0.5);">
+          <img src="https://via.placeholder.com/420x240?text=썸네일3" alt="thumb3" style="width:100%; height:120px; object-fit:cover; display:block;">
+          <div style="padding:10px; color:#ddd; font-size:14px; line-height:1.4;">
+            트럼프, '틱톡 美 사업권 인수' 행정명령 서명
+          </div>
+        </div>
+
+        <div class="extra-card" style="flex:0 0 220px; background:#1f1f1f; border-radius:8px; overflow:hidden; box-shadow:0 1px 6px rgba(0,0,0,0.5);">
+          <img src="https://via.placeholder.com/420x240?text=썸네일4" alt="thumb4" style="width:100%; height:120px; object-fit:cover; display:block;">
+          <div style="padding:10px; color:#ddd; font-size:14px; line-height:1.4;">
+            "치료제 비용 감당 못해"... 희귀질환자 지원 요구
+          </div>
+        </div>
+
+        <div class="extra-card" style="flex:0 0 220px; background:#1f1f1f; border-radius:8px; overflow:hidden; box-shadow:0 1px 6px rgba(0,0,0,0.5);">
+          <img src="https://via.placeholder.com/420x240?text=썸네일5" alt="thumb5" style="width:100%; height:120px; object-fit:cover; display:block;">
+          <div style="padding:10px; color:#ddd; font-size:14px; line-height:1.4;">
+            문화예술 행사 안내: 지역 카페 대관 전시
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 카테고리 박스 -->
+    <div id="extraCategoryContainer" style="background:#242424; border-radius:10px; padding:12px; box-shadow:0 2px 10px rgba(0,0,0,0.45); margin-top:12px;">
+      <div style="font-size:16px; color:#ffae42; font-weight:bold; margin-bottom:10px;">카테고리</div>
+      <div style="display:flex; gap:16px; flex-wrap:wrap;">
+        <!-- 6열 감각으로 보이게 최소 너비를 주었습니다 -->
+        <div style="flex:1 1 14%; min-width:120px;">
+          <div style="color:#ffae42; font-weight:bold; margin-bottom:6px;">게임</div>
+          <ul style="list-style:none; padding:0; margin:0; color:#ddd; font-size:13px; line-height:1.6;">
+            <li>던전앤파이터</li>
+            <li>리그 오브 레전드</li>
+            <li>메이플스토리</li>
+            <li>슬러의 연적</li>
+            <li>아이돌마스터</li>
+          </ul>
+        </div>
+
+        <div style="flex:1 1 14%; min-width:120px;">
+          <div style="color:#ffae42; font-weight:bold; margin-bottom:6px;">연예/방송</div>
+          <ul style="list-style:none; padding:0; margin:0; color:#ddd; font-size:13px; line-height:1.6;">
+            <li>남자 연예인</li>
+            <li>여자 연예인</li>
+            <li>방탄소년단</li>
+            <li>아이유</li>
+            <li>일본 연예</li>
+          </ul>
+        </div>
+
+        <div style="flex:1 1 14%; min-width:120px;">
+          <div style="color:#ffae42; font-weight:bold; margin-bottom:6px;">스포츠</div>
+          <ul style="list-style:none; padding:0; margin:0; color:#ddd; font-size:13px; line-height:1.6;">
+            <li>삼성 라이온즈</li>
+            <li>한화 이글스</li>
+            <li>해외야구</li>
+            <li>국내야구</li>
+            <li>LG 트윈스</li>
+          </ul>
+        </div>
+
+        <div style="flex:1 1 14%; min-width:120px;">
+          <div style="color:#ffae42; font-weight:bold; margin-bottom:6px;">교육/금융/IT</div>
+          <ul style="list-style:none; padding:0; margin:0; color:#ddd; font-size:13px; line-height:1.6;">
+            <li>대출</li>
+            <li>비트코인</li>
+            <li>주식</li>
+            <li>아이폰</li>
+            <li>컴퓨터 본체</li>
+          </ul>
+        </div>
+
+        <div style="flex:1 1 14%; min-width:120px;">
+          <div style="color:#ffae42; font-weight:bold; margin-bottom:6px;">여행/음식/생활</div>
+          <ul style="list-style:none; padding:0; margin:0; color:#ddd; font-size:13px; line-height:1.6;">
+            <li>도시</li>
+            <li>여행-동남아</li>
+            <li>편의점</li>
+            <li>치킨</li>
+            <li>과자, 빵</li>
+          </ul>
+        </div>
+
+        <div style="flex:1 1 14%; min-width:120px;">
+          <div style="color:#ffae42; font-weight:bold; margin-bottom:6px;">취미/생활</div>
+          <ul style="list-style:none; padding:0; margin:0; color:#ddd; font-size:13px; line-height:1.6;">
+            <li>인터넷방송</li>
+            <li>판타지</li>
+            <li>토이</li>
+            <li>만화</li>
+            <li>향수, 화장품</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- === 추가 섹션 끝 === -->
+
   <!-- 로그인 모달 -->
   <div id="loginModal" class="modal">
     <div class="modal-content">
@@ -847,6 +974,52 @@
 
       // 초기 표시
       presShow(0);
+    })();
+  </script>
+
+  <!-- === 추가된 섹션 동작 스크립트 === -->
+  <script>
+    (function(){
+      const wrapper = document.getElementById('extraNewsWrapper');
+      const prevBtn = document.getElementById('extraPrev');
+      const nextBtn = document.getElementById('extraNext');
+      const pageDisplay = document.getElementById('extraPage');
+      if (!wrapper || !prevBtn || !nextBtn || !pageDisplay) return;
+
+      // 기본 페이지 수 계산 (동적)
+      function calcPages() {
+        const visibleWidth = wrapper.clientWidth;
+        // total scrollable width / visible width
+        const totalWidth = wrapper.scrollWidth;
+        const pages = Math.max(1, Math.ceil(totalWidth / visibleWidth));
+        return pages;
+      }
+
+      function updatePageDisplay() {
+        const pages = calcPages();
+        const current = Math.floor(wrapper.scrollLeft / wrapper.clientWidth) + 1;
+        pageDisplay.textContent = `${Math.min(current,pages)}/${pages}`;
+      }
+
+      prevBtn.addEventListener('click', () => {
+        wrapper.scrollBy({ left: -wrapper.clientWidth, behavior: 'smooth' });
+        setTimeout(updatePageDisplay, 450);
+      });
+      nextBtn.addEventListener('click', () => {
+        wrapper.scrollBy({ left: wrapper.clientWidth, behavior: 'smooth' });
+        setTimeout(updatePageDisplay, 450);
+      });
+
+      // 업데이트 on scroll / resize
+      wrapper.addEventListener('scroll', () => {
+        // throttle
+        if (this._extraTimer) clearTimeout(this._extraTimer);
+        this._extraTimer = setTimeout(() => updatePageDisplay(), 120);
+      });
+      window.addEventListener('resize', () => setTimeout(updatePageDisplay, 200));
+
+      // 초기
+      updatePageDisplay();
     })();
   </script>
 
