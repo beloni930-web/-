@@ -290,6 +290,48 @@
       }
     }
 
+    /* === 추가된 뉴스 섹션 스타일 (커뮤니티 박스 바로 아래에 배치되도록) === */
+    .news-box {
+      width: 100%;
+      margin-top: 12px;
+      background-color: #1f1f1f;
+      padding: 8px;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.4);
+      box-sizing: border-box;
+    }
+
+    .news-title {
+      font-size: 14px;
+      color: #ffae42;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    .news-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      width: 100%;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .news-list li {
+      margin: 6px 0;
+    }
+
+    .news-item {
+      display: inline; /* 텍스트 길이만 영역 차지 */
+      transition: color 0.3s;
+      cursor: pointer;
+      color: #ddd;
+    }
+
+    .news-item:hover {
+      color: #fffc6e; /* 형광 노랑 */
+    }
+
   </style>
 </head>
 <body>
@@ -336,6 +378,20 @@
         <li><a href="#">커뮤니티 D</a></li>
         <li><a href="#">커뮤니티 E</a></li>
       </ul>
+
+      <!-- 왼쪽 커뮤니티 바로 아래에 들어가는 뉴스 섹션 (추가됨) -->
+      <div class="news-box" aria-label="왼쪽 커뮤니티 뉴스">
+        <div class="news-title">최신 뉴스</div>
+        <ul class="news-list">
+          <li><span class="news-item">뉴스 1</span></li>
+          <li><span class="news-item">뉴스 2</span></li>
+          <li><span class="news-item">뉴스 3</span></li>
+          <li><span class="news-item">뉴스 4</span></li>
+          <li><span class="news-item">뉴스 5</span></li>
+          <li><span class="news-item">뉴스 11</span></li>
+          <li><span class="news-item">뉴스 12</span></li>
+        </ul>
+      </div>
     </div>
 
     <!-- 중앙 컬럼: 버튼 행이 상단에 오도록 배치 -->
@@ -376,6 +432,20 @@
         <li><a href="#">커뮤니티 I</a></li>
         <li><a href="#">커뮤니티 J</a></li>
       </ul>
+
+      <!-- 오른쪽 커뮤니티 바로 아래에 들어가는 뉴스 섹션 (추가됨) -->
+      <div class="news-box" aria-label="오른쪽 커뮤니티 뉴스">
+        <div class="news-title">주요 공지</div>
+        <ul class="news-list">
+          <li><span class="news-item">뉴스 6</span></li>
+          <li><span class="news-item">뉴스 7</span></li>
+          <li><span class="news-item">뉴스 8</span></li>
+          <li><span class="news-item">뉴스 9</span></li>
+          <li><span class="news-item">뉴스 10</span></li>
+          <li><span class="news-item">뉴스 13</span></li>
+          <li><span class="news-item">뉴스 14</span></li>
+        </ul>
+      </div>
     </div>
   </div>
 
