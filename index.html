@@ -105,16 +105,20 @@
        (오직 이 블록만 수정됨)
        ============================ */
 
-    /* 데스크톱에서 슬라이더와 동일한 기준(70%)을 따르도록 max-width 제거하고 padding 0으로 복구 */
+    /* 컨테이너 폭 제한을 두어 전체 블록이 중앙에 정렬되게 함.
+       데스크톱에서는 width:70% 유지 + max-width 제한으로 중앙 고정.
+    */
     .community-section {
       width: 70%;
+      max-width: 1100px; /* 전체가 화면을 벗어나지 않도록 상한값 지정 */
       margin: 25px auto 0 auto;
       display: flex;
       justify-content: space-between; /* 좌/중/우 균등 배치 */
       align-items: flex-start;
       gap: 20px;
       box-sizing: border-box;
-      padding: 0; /* 슬라이더과 동일한 가로 기준을 위해 여백 제거 */
+      padding: 0 12px; /* 좌우 여백을 주어 작은 화면에서 밀착 방지 */
+      /* allow wrapping if needed (but we'll force mobile stacking in media query) */
       flex-wrap: nowrap;
     }
 
@@ -125,7 +129,7 @@
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.4);
 
-      flex: 0 0 180px;   /* 데스크톱 기본 너비 */
+      flex: 0 0 180px;   /* 데스크톱 기본 너비(두 개 합이 가운데 컬럼과 잘 맞게) */
       max-width: 220px;
       min-width: 120px;
 
@@ -135,11 +139,12 @@
       box-sizing: border-box;
     }
 
-    /* 가운데 컬럼이 원래처럼 넓게 차지하도록 max-width 제한 제거 */
+    /* 가운데 컬럼이 너무 넓어져서 옆 박스가 밀려나가지 않도록 min-width/ max-width 설정.
+       flex-basis + min-width:0을 통해 flex 아이템 축소 허용 (오버플로우 방지) */
     .middle-column {
-      flex: 1 1 auto; /* 남은 공간을 차지 */
+      flex: 1 1 auto; /* 남은 공간 차지 */
       min-width: 0;   /* 핵심: 자식 요소가 너무 커서 부모를 밀어내지 않게 함 */
-      max-width: none; /* 이전에 중앙을 과도하게 제한한 값을 제거하여 ddff와 동일 폭 복구 */
+      max-width: calc(100% - 380px); /* (사이드바 180px * 2) + gap 여유를 빼서 중앙 컬럼 폭 제한 */
       display: flex;
       flex-direction: column;
       align-items: stretch;
@@ -218,10 +223,11 @@
       overflow-wrap: normal;
     }
 
-    /* 작은 화면(태블릿 이하): 중앙영역의 max-width 제거된 상태에서도 정상 동작하도록 조정 */
+    /* 작은 화면(태블릿 이하): 중앙영역의 max-width 제거하고 레이아웃이 자연스럽게 줄어들게 함 */
     @media (max-width: 900px) {
       .community-section {
         width: 92%;
+        max-width: 920px;
         padding: 0 10px;
         gap: 14px;
       }
@@ -231,7 +237,7 @@
         max-width: 180px;
       }
       .middle-column {
-        max-width: none;
+        max-width: calc(100% - 300px);
       }
     }
 
@@ -1078,6 +1084,7 @@
 </html>
 
 
+
   <!-- === 추가된 섹션 동작 스크립트 === -->
   <script>
     (function(){
@@ -1145,6 +1152,7 @@
 
 </body>
 </html>
+
 
 
 
