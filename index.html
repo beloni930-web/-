@@ -10,6 +10,21 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <meta charset="UTF-8">
   <title>유피드 밴블리온</title>
+   <style>
+    body {
+      zoom: 1; /* PC 기본값: 100% */
+    }
+  </style>
+
+  <!-- 모바일 감지 후 확대 적용 -->
+  <script>
+    // User-Agent 검사: 모바일 기기(Android, iPhone, iPad, iPod 등)
+    if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      document.addEventListener("DOMContentLoaded", () => {
+        document.body.style.zoom = "2"; // 모바일 전용 200% 확대
+      });
+    }
+  </script>
   <style>
     body {
       margin: 0;
@@ -1152,6 +1167,7 @@
 
 </body>
 </html>
+
 
 
 
