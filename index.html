@@ -68,14 +68,18 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
 
+    /* 변경: slides 너비 고정값(300%) 제거 -> 100% (자식 요소를 overflow로 배치)
+       그리고 각 이미지가 슬라이더 폭을 정확히 차지하도록 flex 지정 */
     .slides {
       display: flex;
-      width: 300%;
+      width: 100%;
       height: 100%;
       transition: transform 0.6s ease-in-out;
     }
 
     .slides img {
+      /* 각 이미지가 슬라이더(뷰포트) 전체 너비를 차지하도록 고정 */
+      flex: 0 0 100%;
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -469,9 +473,10 @@
       flex: 0 0 170px;
     }
 
+    /* 변경: inner-slides도 고정 300% 제거 -> 100% */
     .inner-slides {
       display: flex;
-      width: 300%;
+      width: 100%;
       height: 100%;
       transition: transform 0.6s ease-in-out;
     }
@@ -1028,7 +1033,9 @@
     }
 
     function autoSlide() {
-      index = (index + 1) % 3;
+      // 변경: 슬라이드 개수에 따라 동적으로 순환하도록 (하드코딩된 3 제거)
+      const slideCount = slides ? slides.children.length : 1;
+      index = (index + 1) % slideCount;
       showSlide(index);
     }
 
@@ -1080,10 +1087,6 @@
       presShow(0);
     })();
   </script>
-</body>
-</html>
-
-
 
   <!-- === 추가된 섹션 동작 스크립트 === -->
   <script>
@@ -1152,6 +1155,7 @@
 
 </body>
 </html>
+
 
 
 
