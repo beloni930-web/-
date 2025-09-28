@@ -102,36 +102,53 @@
 
     /* ============================
        변경된: 커뮤니티(좌-중-우) 관련 스타일
-       (아래 블록만 교체됨 — 나머지 스타일은 원본 그대로)
+       (오직 이 블록만 수정됨)
        ============================ */
 
+    /* 컨테이너 폭 제한을 두어 전체 블록이 중앙에 정렬되게 함.
+       데스크톱에서는 width:70% 유지 + max-width 제한으로 중앙 고정.
+    */
     .community-section {
       width: 70%;
+      max-width: 1100px; /* 전체가 화면을 벗어나지 않도록 상한값 지정 */
       margin: 25px auto 0 auto;
       display: flex;
-      justify-content: space-between;
+      justify-content: space-between; /* 좌/중/우 균등 배치 */
       align-items: flex-start;
       gap: 20px;
       box-sizing: border-box;
-      /* 강제 줄넘김/스크롤에 의한 레이아웃 붕괴 방지 */
+      padding: 0 12px; /* 좌우 여백을 주어 작은 화면에서 밀착 방지 */
+      /* allow wrapping if needed (but we'll force mobile stacking in media query) */
       flex-wrap: nowrap;
     }
 
-    /* 사이드바(왼쪽/오른쪽) : flex 고정폭으로 설정하여 너무 작아지지 않게 함 */
+    /* 사이드바(왼쪽/오른쪽) : flex 고정폭으로 설정 (데스크톱 기준) */
     .community-box {
       background-color: #242424;
       padding: 15px;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.4);
 
-      /* 기존 width 대신 flex 기반 고정폭 사용 (축소 방지) */
-      flex: 0 0 180px;   /* 데스크톱 기본 너비 */
+      flex: 0 0 180px;   /* 데스크톱 기본 너비(두 개 합이 가운데 컬럼과 잘 맞게) */
       max-width: 220px;
       min-width: 120px;
 
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      box-sizing: border-box;
+    }
+
+    /* 가운데 컬럼이 너무 넓어져서 옆 박스가 밀려나가지 않도록 min-width/ max-width 설정.
+       flex-basis + min-width:0을 통해 flex 아이템 축소 허용 (오버플로우 방지) */
+    .middle-column {
+      flex: 1 1 auto; /* 남은 공간 차지 */
+      min-width: 0;   /* 핵심: 자식 요소가 너무 커서 부모를 밀어내지 않게 함 */
+      max-width: calc(100% - 380px); /* (사이드바 180px * 2) + gap 여유를 빼서 중앙 컬럼 폭 제한 */
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
       box-sizing: border-box;
     }
 
@@ -155,17 +172,15 @@
       margin: 0;
       width: 100%;
 
-      /* 아주 좁은 상황에서의 이상한 분리 방지 */
       word-break: keep-all;
       overflow-wrap: normal;
       white-space: normal;
     }
 
     .community-list li {
-      margin: 8px 0; /* 간격을 살짝 줄여 모바일에서 밀착되는 현상 완화 */
+      margin: 8px 0;
       line-height: 1.4;
 
-      /* 각 항목에 대한 줄바꿈 규칙 */
       word-break: keep-all;
       overflow-wrap: normal;
     }
@@ -177,7 +192,6 @@
       font-weight: normal;
       transition: color 0.3s;
 
-      /* 링크 텍스트도 단어 단위로 유지 */
       word-break: keep-all;
       overflow-wrap: normal;
       white-space: normal;
@@ -202,38 +216,54 @@
       white-space: normal;
     }
 
-    /* 뉴스 항목 (inline 사용에 의한 이상 동작 방지) */
-    .news-list {
-      list-style:none;
-      padding:0;
-      margin:0;
-    }
+    .news-list { list-style:none; padding:0; margin:0; }
     .news-list li {
       margin:6px 0;
       word-break: keep-all;
       overflow-wrap: normal;
     }
 
-    /* 작은 화면에서의 조정: 박스가 너무 작아지지 않도록 flex 고정폭 유지
-       + 전체 레이아웃이 좁아지면 세로로 스택되도록 선택적으로 변경 가능 */
+    /* 작은 화면(태블릿 이하): 중앙영역의 max-width 제거하고 레이아웃이 자연스럽게 줄어들게 함 */
+    @media (max-width: 900px) {
+      .community-section {
+        width: 92%;
+        max-width: 920px;
+        padding: 0 10px;
+        gap: 14px;
+      }
+      .community-box {
+        flex: 0 0 150px;
+        min-width: 120px;
+        max-width: 180px;
+      }
+      .middle-column {
+        max-width: calc(100% - 300px);
+      }
+    }
+
+    /* 모바일(좁은 스마트폰): 세로 스택으로 전환하여 오버플로우 완전 제거.
+       (이 동작은 모바일에서만 적용되므로 데스크톱 레이아웃에는 영향 없음) */
     @media (max-width: 700px) {
       .community-section {
-        gap: 12px;
+        flex-direction: column; /* 세로 스택: 중앙 컨텐츠가 맨 위로 오게 하거나 순서 변경 가능 */
         width: 92%;
-        /* 만약 세로 스택을 원하면 아래 주석을 해제하세요:
-           flex-direction: column;
-        */
+        align-items: stretch;
+        gap: 12px;
+      }
+
+      .middle-column {
+        order: -1; /* 모바일에서 중앙 컨텐츠(버튼+중앙박스)를 맨 위로 올림 */
+        max-width: none;
+        min-width: 0;
       }
 
       .community-box {
-        flex: 0 0 140px; /* 모바일 고정폭(너무 작아지지 않도록) */
-        min-width: 120px;
-        max-width: 48%;
-        /* 모바일에서 옆으로 배치될 때 과도한 줄바꿈 방지 */
-        box-sizing: border-box;
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
       }
 
-      /* 모바일에서 리스트 항목 폰트 크기 약간 축소 */
       .community-list a {
         font-size: 14px;
       }
@@ -242,15 +272,6 @@
     /* ============================
        (변경된 블록 끝)
        ============================ */
-
-    /* 중앙 컬럼: 버튼 행 + 중앙 세션(중앙 박스) 포함 */
-    .middle-column {
-      flex: 1; /* 좌우 고정 폭을 제외한 나머지를 차지 */
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 16px;
-    }
 
     /* 버튼 UI: 중앙 컬럼 상단에 배치, 버튼들 사이를 균등 분배
        -> 변경 포인트: 좌우 패딩을 늘려 양끝 버튼과 사이드 박스 거리 확보 */
@@ -303,9 +324,8 @@
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.4);
       padding: 20px;
-      /* margin-top을 제거하거나 작게 유지해서 버튼과의 간격을 사진과 유사하게 조정 */
       margin: 0 0 0 0;
-      min-height: 110px; /* 사진의 중앙 박스 높이 느낌을 반영 */
+      min-height: 110px;
       text-align: center;
       display: flex;
       align-items: center;
@@ -371,7 +391,7 @@
         width: 92%;
       }
       .community-box {
-        width: 140px; /* <-- 모바일 쪽도 소폭 축소 (이전 160px에서 140px) */
+        width: 140px;
       }
       .icon-buttons {
         padding: 0 16px; /* 모바일에서는 패딩 줄임 */
@@ -426,10 +446,7 @@
     }
 
     /* === 중앙세션 내부(종속 세션) 스타일 추가 === */
-    /* .middle-box 레이아웃을 내부 종속 세션을 담기 좋은 flex column으로 변경합니다.
-       (이 블록은 중앙 세션 관련 편집에 해당하며, 다른 부분은 건드리지 않았습니다.) */
     .middle-box {
-      /* 기존 스타일을 유지하되 내부 레이아웃을 세로 방향 카드형으로 구성 */
       display: flex;
       flex-direction: column;
       align-items: stretch;
@@ -437,7 +454,7 @@
       min-height: 320px; /* 종속 섹션들이 잘 보이도록 높이를 확장 */
       padding: 14px;
       box-sizing: border-box;
-      text-align: left; /* 내부 텍스트 정렬은 왼쪽이 가독성에 좋음 */
+      text-align: left;
     }
 
     /* 상단 프리젠테이션(슬라이드) */
@@ -1066,7 +1083,6 @@
 </body>
 </html>
 
-
   <!-- === 추가된 섹션 동작 스크립트 === -->
   <script>
     (function(){
@@ -1134,6 +1150,7 @@
 
 </body>
 </html>
+
 
 
 
