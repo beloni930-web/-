@@ -100,44 +100,74 @@
       background-color: #003d80;
     }
 
-    /* 커뮤니티 섹션: 좌 - 중앙 - 우 가로 정렬 (버튼이 중앙 컬럼 상단에 위치) */
+    /* ============================
+       변경된: 커뮤니티(좌-중-우) 관련 스타일
+       (아래 블록만 교체됨 — 나머지 스타일은 원본 그대로)
+       ============================ */
+
     .community-section {
       width: 70%;
       margin: 25px auto 0 auto;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start; /* 상단 기준 정렬해서 버튼과 커뮤니티 박스의 Y 좌표를 맞춤 */
+      align-items: flex-start;
       gap: 20px;
+      box-sizing: border-box;
+      /* 강제 줄넘김/스크롤에 의한 레이아웃 붕괴 방지 */
+      flex-wrap: nowrap;
     }
 
-    /* 왼쪽 / 오른쪽 커뮤니티 박스 너비 고정 (사진과 비슷한 레이아웃을 위해 고정 폭)
-       -> 변경: 가로 길이(너비)를 조금 줄여 미관 개선 (너무 뚱뚱하지 않게) */
+    /* 사이드바(왼쪽/오른쪽) : flex 고정폭으로 설정하여 너무 작아지지 않게 함 */
     .community-box {
       background-color: #242424;
       padding: 15px;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-      width: 180px; /* <-- 조정: 기존 200px에서 180px로 소폭 축소 */
+
+      /* 기존 width 대신 flex 기반 고정폭 사용 (축소 방지) */
+      flex: 0 0 180px;   /* 데스크톱 기본 너비 */
+      max-width: 220px;
+      min-width: 120px;
+
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      box-sizing: border-box;
     }
 
+    /* 제목 */
     .community-title {
       font-size: 18px;
       font-weight: bold;
       margin-bottom: 10px;
       color: #ffae42;
+
+      /* 제목도 줄바꿈 규칙 적용 (한글 글자별 분리 방지) */
+      word-break: keep-all;
+      overflow-wrap: normal;
+      white-space: normal;
     }
 
+    /* 커뮤니티 리스트와 링크: 한글 단위 분리 방지 */
     .community-list {
       list-style: none;
       padding: 0;
       margin: 0;
+      width: 100%;
+
+      /* 아주 좁은 상황에서의 이상한 분리 방지 */
+      word-break: keep-all;
+      overflow-wrap: normal;
+      white-space: normal;
     }
 
     .community-list li {
-      margin: 10px 0;
+      margin: 8px 0; /* 간격을 살짝 줄여 모바일에서 밀착되는 현상 완화 */
+      line-height: 1.4;
+
+      /* 각 항목에 대한 줄바꿈 규칙 */
+      word-break: keep-all;
+      overflow-wrap: normal;
     }
 
     .community-list a {
@@ -146,11 +176,72 @@
       font-size: 16px;
       font-weight: normal;
       transition: color 0.3s;
+
+      /* 링크 텍스트도 단어 단위로 유지 */
+      word-break: keep-all;
+      overflow-wrap: normal;
+      white-space: normal;
     }
 
     .community-list a:hover {
       color: #ffae42;
     }
+
+    /* 왼/오른쪽 커뮤니티 바로 아래 뉴스 박스는 사이즈와 줄바꿈 규칙을 동일하게 적용 */
+    .news-box {
+      width: 100%;
+      margin-top: 12px;
+      background-color: #1f1f1f;
+      padding: 8px;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.4);
+      box-sizing: border-box;
+
+      word-break: keep-all;
+      overflow-wrap: normal;
+      white-space: normal;
+    }
+
+    /* 뉴스 항목 (inline 사용에 의한 이상 동작 방지) */
+    .news-list {
+      list-style:none;
+      padding:0;
+      margin:0;
+    }
+    .news-list li {
+      margin:6px 0;
+      word-break: keep-all;
+      overflow-wrap: normal;
+    }
+
+    /* 작은 화면에서의 조정: 박스가 너무 작아지지 않도록 flex 고정폭 유지
+       + 전체 레이아웃이 좁아지면 세로로 스택되도록 선택적으로 변경 가능 */
+    @media (max-width: 700px) {
+      .community-section {
+        gap: 12px;
+        width: 92%;
+        /* 만약 세로 스택을 원하면 아래 주석을 해제하세요:
+           flex-direction: column;
+        */
+      }
+
+      .community-box {
+        flex: 0 0 140px; /* 모바일 고정폭(너무 작아지지 않도록) */
+        min-width: 120px;
+        max-width: 48%;
+        /* 모바일에서 옆으로 배치될 때 과도한 줄바꿈 방지 */
+        box-sizing: border-box;
+      }
+
+      /* 모바일에서 리스트 항목 폰트 크기 약간 축소 */
+      .community-list a {
+        font-size: 14px;
+      }
+    }
+
+    /* ============================
+       (변경된 블록 끝)
+       ============================ */
 
     /* 중앙 컬럼: 버튼 행 + 중앙 세션(중앙 박스) 포함 */
     .middle-column {
@@ -972,6 +1063,9 @@
       presShow(0);
     })();
   </script>
+</body>
+</html>
+
 
   <!-- === 추가된 섹션 동작 스크립트 === -->
   <script>
@@ -1040,6 +1134,7 @@
 
 </body>
 </html>
+
 
 
 
