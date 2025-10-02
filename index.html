@@ -1,9 +1,3 @@
-<!--
-경고: 귀하가 무단 수집하려는 사이트의 핵심 데이터는 본 오픈소스에 포함되지 않습니다. 본 사이트의 무단 소스 코드 데이터 수집(크롤링, 스크래핑 등)행위는 서버 접근 로그에 기기의 IP와 함께 기록됩니다.
-허용된 관리자 인터페이스를 제외한 IP가 데이터를 수집하는 행위는 적발 즉시 밴블리온 운영 정책에 따른 IP 유포와 유저 정보 공개 등 상응한 제재가 이루어질 수 있습니다.
-당신의 코멘트 정보가 실시간으로 기록 중입니다.
--->
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -481,7 +475,9 @@
       transition: transform 0.6s ease-in-out;
     }
 
+    /* ========== 수정된 부분: inner-slide가 배경이미지를 받을 수 있도록 변경 ========== */
     .inner-slide {
+      position: relative; /* 배경 및 오버레이를 위해 position 사용 */
       flex: 0 0 100%;
       height: 100%;
       padding: 14px;
@@ -490,7 +486,50 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+
+      /* 배경 이미지가 들어갈 수 있도록 설정 */
+      background-color: #2a2a2a; /* 기본 배경(대체) */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: background-image 0.3s ease, transform 0.25s ease;
     }
+
+    /* 텍스트 컨텐츠는 z-index 위로 올려서 가독성 확보 */
+    .inner-slide .slide-content {
+      position: relative;
+      z-index: 2;
+      max-width: 78%;
+      /* 배경 이미지에 따라 텍스트 색상이 흐려질 수 있으니 약간의 텍스트 쉐도우 */
+      text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+    }
+
+    /* 어두운 오버레이 추가 (pseudo element)로 가독성 향상 */
+    .inner-slide::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; right: 0; bottom: 0;
+      z-index: 1;
+      background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.5));
+      pointer-events: none;
+    }
+
+    /* 편집 버튼 (작고 눈에 거슬리지 않게) */
+    .inner-slide .bg-edit {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      z-index: 3;
+      background: rgba(0,0,0,0.4);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+    }
+    .inner-slide .bg-edit:hover { background: rgba(0,0,0,0.6); }
 
     .pres-title {
       font-size: 18px;
@@ -504,6 +543,7 @@
       color: #ddd;
       line-height: 1.4;
     }
+    /* ========== 수정된 부분 끝 ========== */
 
     /* 프리젠테이션 도트 네비게이션 (작게) */
     .pres-dots {
@@ -707,18 +747,30 @@
         <!-- 상단: 프리젠테이션처럼 자동 전환되는 큰 패널 -->
         <div class="presentation-carousel" aria-label="프리젠테이션 섹션">
           <div class="inner-slides">
-            <div class="inner-slide">
-              <div class="pres-title">이달의 이벤트</div>
-              <div class="pres-desc">신규 가입자 대상 특별 보너스가 지급됩니다. 자세한 내용은 이벤트 페이지에서 확인하세요.</div>
+            <div class="inner-slide" data-bg="https://images.unsplash.com/photo-1506765515384-028b60a970df?auto=format&fit=crop&w=1350&q=80">
+              <button class="bg-edit" onclick="changeBg(this)">배경 변경</button>
+              <div class="slide-content">
+                <div class="pres-title">이달의 이벤트</div>
+                <div class="pres-desc">신규 가입자 대상 특별 보너스가 지급됩니다. 자세한 내용은 이벤트 페이지에서 확인하세요.</div>
+              </div>
             </div>
-            <div class="inner-slide">
-              <div class="pres-title">업데이트 알림</div>
-              <div class="pres-desc">시스템 점검이 예정되어 있습니다. 점검 시간 동안 일부 기능이 제한될 수 있습니다.</div>
+
+            <div class="inner-slide" data-bg="">
+              <button class="bg-edit" onclick="changeBg(this)">배경 변경</button>
+              <div class="slide-content">
+                <div class="pres-title">업데이트 알림</div>
+                <div class="pres-desc">시스템 점검이 예정되어 있습니다. 점검 시간 동안 일부 기능이 제한될 수 있습니다.</div>
+              </div>
             </div>
-            <div class="inner-slide">
-              <div class="pres-title">커뮤니티 챌린지</div>
-              <div class="pres-desc">이번 주에는 '사진 공유' 챌린지가 진행됩니다. 우수작에게 소정의 상품을 드립니다.</div>
+
+            <div class="inner-slide" data-bg="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1350&q=80">
+              <button class="bg-edit" onclick="changeBg(this)">배경 변경</button>
+              <div class="slide-content">
+                <div class="pres-title">커뮤니티 챌린지</div>
+                <div class="pres-desc">이번 주에는 '사진 공유' 챌린지가 진행됩니다. 우수작에게 소정의 상품을 드립니다.</div>
+              </div>
             </div>
+
           </div>
           <div class="pres-dots" aria-hidden="false">
             <span class="pres-dot active" data-i="0"></span>
@@ -1054,6 +1106,33 @@
       const presDots = Array.from(document.querySelectorAll(".pres-dot"));
       if (!presSlides || presDots.length === 0) return; // 중앙세션이 없으면 중단
 
+      // --- 새로 추가: data-bg에 따라 배경 적용 ---
+      function applyBgToSlides() {
+        const slides = Array.from(document.querySelectorAll('.inner-slide'));
+        slides.forEach(slide => {
+          const bg = slide.getAttribute('data-bg') || '';
+          if (bg.trim()) {
+            slide.style.backgroundImage = `url("${bg}")`;
+          } else {
+            slide.style.backgroundImage = '';
+          }
+        });
+      }
+
+      // 편집 버튼이 눌렸을 때 동작: URL 입력 받고 적용
+      window.changeBg = function(btn) {
+        const slide = btn.closest('.inner-slide');
+        const current = slide.getAttribute('data-bg') || '';
+        const url = prompt('배경 이미지 URL을 입력하세요 (빈칸으로 제거):', current);
+        if (url === null) return; // 취소
+        slide.setAttribute('data-bg', url.trim());
+        if (url.trim()) slide.style.backgroundImage = `url("${url.trim()}")`;
+        else slide.style.backgroundImage = '';
+      }
+
+      // 실행 로직: 슬라이드 배경 적용 + 슬라이드 동작
+      applyBgToSlides();
+
       let presIndex = 0;
       const presCount = presDots.length;
 
@@ -1155,20 +1234,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
